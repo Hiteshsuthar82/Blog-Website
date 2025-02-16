@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Blog Alert 🚀</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .blog-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .blog-title {
+            font-size: 20px;
+            margin: 15px 0;
+            color: #444;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p class="header">🚀 New Blog Alert!</p>
+        <img class="blog-image" src="{{blogImage}}" alt="Blog Image">
+        <p class="blog-title">{{blogTitle}}</p>
+        <p>Hey {{fullName}}, a new blog has been published! Check it out now. 🎉</p>
+        <a href="http://localhost:5173/blog/{{blogId}}" class="cta-button">Read Now</a>
+        <p class="footer">If you no longer wish to receive these updates, you can unsubscribe anytime.</p>
+    </div>
+</body>
+</html>

@@ -8,7 +8,8 @@ import {
     togglePublishStatus,
     getPublishedBlogs,
     getPublishedBlogsForUser,
-    getNotPublishedBlogsForUser
+    getNotPublishedBlogsForUser,
+    sendBlogUpdateToVerifiedUsers
 } from '../controllers/blog.controller.js'
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -48,6 +49,10 @@ router.route("/blogcreate").post(
 //   get not published data of user
   router.route("/notpublishedblogs").get(verifyJWT, getNotPublishedBlogsForUser);
 
+
+
+  // send mail notification of new blogs all veried users
+  router.route("/send-blog-updates/:blogId").post( sendBlogUpdateToVerifiedUsers);
 
 
 //   get publish status all the data

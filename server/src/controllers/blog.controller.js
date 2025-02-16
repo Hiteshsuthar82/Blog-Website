@@ -18,6 +18,12 @@ import { generateOtp } from "../utils/OtpGenrator.js";
 export const createBlog = asyncHandler(async (req, res) => {
     // Get user ID from token
     const userId = req.user.id;
+
+      // Get user details
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new ApiError(404, "User not found!");
+      }
   
     // Get data from request
     const { title, content , isPublished } = req.body;
@@ -49,15 +55,131 @@ export const createBlog = asyncHandler(async (req, res) => {
     if (!blog) {
       throw new ApiError(500, "Failed to create blog post!");
     }
+
+        // Send email only if user is verified
+        if (user.isVerified) {
+            await sendEmail(user.email, "Blog Posted Successfully", "blog_posted", {
+              fullName: user.fullName || user.username,
+              blogTitle: blog.title,
+            });
+          }
   
     // Send response
     return res
       .status(201)
       .json(new ApiResponse(201, blog, "Blog post created successfully!"));
   });
+
+
+ 
+// send new blog for all verfied users
+export const sendBlogUpdateToVerifiedUsers = asyncHandler(async (req, res) => {
+  const { blogId } = req.params;
+
+  // Get blog details
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    throw new ApiError(404, "Blog not found!");
+  }
+
+  // Get blog author's ID
+  const authorId = blog.author.toString();
+
+  // Get all verified users except the blog author
+  const verifiedUsers = await User.find({ isVerified: true, _id: { $ne: authorId } }).select(
+    "email fullName username"
+  );
+
+  if (verifiedUsers.length === 0) {
+    return res.status(400).json(new ApiResponse(400, [], "No verified users found!"));
+  }
+
+  // Send email to each verified user
+  const emailPromises = verifiedUsers.map((user) =>
+    sendEmail(user.email, "🚀 New Blog Alert!", "ALL_blog_posted", {
+      fullName: user.fullName || user.username,
+      blogTitle: blog.title,
+      blogImage: blog.image || "https://example.com/default-blog-image.jpg",
+      blogId: blog._id, 
+    })
+  );
+
+  // Wait for all emails to be sent
+  await Promise.all(emailPromises);
+
+  return res.status(200).json(new ApiResponse(200, [], "Emails sent to all verified users!"));
+});
+
+
+
+//   11.send mail all verfied users of new blog post
+
+// export const createBlog = asyncHandler(async (req, res) => {
+//     // Get user ID from token
+//     const userId = req.user.id;
+
+//     // Get user details
+//     const user = await User.findById(userId);
+//     if (!user) {
+//         throw new ApiError(404, "User not found!");
+//     }
+
+//     // Get data from request
+//     const { title, content, isPublished } = req.body;
+
+//     // Validation
+//     if (!title || !content) {
+//         throw new ApiError(400, "Title and content are required!");
+//     }
+
+//     // Handling Image Upload
+//     let imageURL = "";
+//     if (req.file) {
+//         const imageRes = await uploadOnCloudinary(req.file.path);
+//         if (!imageRes) {
+//             throw new ApiError(500, "Image upload failed!");
+//         }
+//         imageURL = imageRes.url;
+//     }
+
+//     // Create new blog post
+//     const blog = await Blog.create({
+//         title,
+//         content,
+//         author: userId,
+//         image: imageURL || undefined,
+//         isPublished,
+//     });
+
+//     if (!blog) {
+//         throw new ApiError(500, "Failed to create blog post!");
+//     }
+
+//     // Fetch all verified users
+//     const verifiedUsers = await User.find({ isVerified: true }).select("email fullName username");
+
+//     // Send email to all verified users
+//     const emailPromises = verifiedUsers.map((verifiedUser) =>
+//         sendEmail(verifiedUser.email, "New Blog Posted", "blog_posted", {
+//             fullName: verifiedUser.fullName || verifiedUser.username,
+//             blogTitle: blog.title,
+//             blogLink: `https://yourwebsite.com/blogs/${blog._id}` // Update with actual blog URL
+//         })
+//     );
+
+//     // Execute all email promises
+//     await Promise.all(emailPromises);
+
+//     // Send response
+//     return res
+//         .status(201)
+//         .json(new ApiResponse(201, blog, "Blog post created successfully! Emails sent to all verified users."));
+// });
+
   
 
 // 2. edit blog post
+
 export const editBlog = asyncHandler(async (req, res) => {
     // Get blog ID from request params
     const { blogId } = req.params;
