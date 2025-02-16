@@ -30,6 +30,7 @@ import userRouter from "./routes/user.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 import likeRouter from "./routes/like.routes.js";
+import commentRouter from "./routes/comment.routes.js";
 
 
 
@@ -38,5 +39,6 @@ app.use("/api/v1/admin", adminRouter);
 
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/like", likeRouter);
+app.use("/api/v1/comment", commentRouter);
 
 export { app };

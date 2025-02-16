@@ -36,6 +36,7 @@ export const likeBlog = asyncHandler(async (req, res) => {
     return res.status(201).json(new ApiResponse(201, null, "Blog liked successfully!"));
 });
 
+// get total likes of the all blogs
 
 
 
