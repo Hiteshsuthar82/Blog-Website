@@ -356,17 +356,23 @@ export const togglePublishStatus = asyncHandler(async (req, res) => {
 
 //   get all the only published true posts from the blog
 export const getPublishedBlogs = asyncHandler(async (req, res) => {
-    try {
-        // Find all blogs where isPublished is true and populate author details
-        const blogs = await Blog.find({ isPublished: true }).populate("author", "username avatar email");
+  try {
+      // Find all published blogs and populate author + comments (with owner details)
+      const blogs = await Blog.find({ isPublished: true })
+          .populate("author", "username avatar email")
+          .populate({
+              path: "comments",
+              populate: { path: "owner", select: "username avatar email" }, // Populate owner of each comment
+          });
 
-        if (!blogs || blogs.length === 0) {
-            throw new ApiError(404, "No published blogs found!");
-        }
+      if (!blogs || blogs.length === 0) {
+          throw new ApiError(404, "No published blogs found!");
+      }
 
-        // Send response
-        return res.status(200).json(new ApiResponse(200, blogs, "Published blogs fetched successfully!"));
-    } catch (error) {
-        throw new ApiError(500, "Something went wrong!");
-    }
+      // Send response
+      return res.status(200).json(new ApiResponse(200, blogs, "Published blogs fetched successfully!"));
+  } catch (error) {
+      throw new ApiError(500, "Something went wrong!");
+  }
 });
+
