@@ -1,68 +1,87 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart, MessageCircle, PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Home() {
   const navigate = useNavigate();
+  const [allBlogs, setAllBlogs] = useState([]);
+  const apiurl = import.meta.env.VITE_API_URL;
 
-  const allBlogs = [
-    {
-      _id:"1",
-      bannerImg:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROvJuFdhlFQ4Zxu6pov9RMus7mKLwjH5Tugw&s",
-      title: "xyz company is broken",
-      description:
-        "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
-      auther: {
-        username: "john Doe",
-        image:
-          "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-      },
-      likes: "100",
-      comments: [
-        {
-          username: "john",
-          content: "hello bhai mere kya hal",
-          profileImg:
-            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-        },
-        {
-          username: "ramsh sharma",
-          content: "hello bhai mere kya hal",
-          profileImg:
-            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-        },
-      ],
-    },
-    {
-      _id:"2",
-      bannerImg:
-        "https://intihug.com/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg",
-      title: "xyz company is broken",
-      description:
-        "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
-      auther: {
-        username: "john Doe",
-        image:
-          "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-      },
-      likes: "100",
-      comments: [
-        {
-          username: "john",
-          content: "hello bhai mere kya hal",
-          profileImg:
-            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-        },
-        {
-          username: "ramsh sharma",
-          content: "hello bhai mere kya hal",
-          profileImg:
-            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-        },
-      ],
-    },
-  ];
+
+  useEffect(()=>{
+    getAllBlogs();
+  },[])
+
+  const getAllBlogs = async () => {
+    const response = await axios.get(
+      `${apiurl}/blog/AllPublishedBlogs`,
+      { withCredentials: true }
+    );
+    if (response?.data.success) {
+      console.log(response);
+      setAllBlogs(response.data.data)
+    }
+  }
+
+    // const allBlogs = [
+    //   {
+    //     _id:"1",
+    //     image:
+    //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROvJuFdhlFQ4Zxu6pov9RMus7mKLwjH5Tugw&s",
+    //     title: "xyz company is broken",
+    //     description:
+    //       "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+    //     author: {
+    //       username: "john Doe",
+    //       image:
+    //         "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //     },
+    //     likes: "100",
+    //     comments: [
+    //       {
+    //         username: "john",
+    //         content: "hello bhai mere kya hal",
+    //         profileImg:
+    //           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //       },
+    //       {
+    //         username: "ramsh sharma",
+    //         content: "hello bhai mere kya hal",
+    //         profileImg:
+    //           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     _id:"2",
+    //     image:
+    //       "https://intihug.com/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg",
+    //     title: "xyz company is broken",
+    //     description:
+    //       "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+    //     author: {
+    //       username: "john Doe",
+    //       image:
+    //         "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //     },
+    //     likes: "100",
+    //     comments: [
+    //       {
+    //         username: "john",
+    //         content: "hello bhai mere kya hal",
+    //         profileImg:
+    //           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //       },
+    //       {
+    //         username: "ramsh sharma",
+    //         content: "hello bhai mere kya hal",
+    //         profileImg:
+    //           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    //       },
+    //     ],
+    //   },
+    // ];
 
   return (
     <div className="max-w-6xl mx-auto p-4 relative">
@@ -85,8 +104,8 @@ function Home() {
   );
 }
 
-const BlogCard = ({ blog, navigate }) => {
-  const [likes, setLikes] = useState(parseInt(blog.likes));
+const BlogCard = ({ blog, navigate }) => {  
+  const [likes, setLikes] = useState(parseInt(blog.likes.length));
 
   return (
     <div
@@ -94,7 +113,7 @@ const BlogCard = ({ blog, navigate }) => {
       onClick={() => navigate(`/blog/${blog._id}`, { state: { blog } })}
     >
       <img
-        src={blog.bannerImg}
+        src={blog.image}
         alt="Blog Banner"
         className="w-full h-48 object-cover"
       />
@@ -102,12 +121,12 @@ const BlogCard = ({ blog, navigate }) => {
         <h2 className="text-xl font-semibold">{blog.title}</h2>
         <div className="flex gap-2 mt-2">
           <img
-            src={blog.auther.image}
+            src={blog.author.avatar}
             className="h-10 w-10 rounded-full"
             alt="profile img"
           />
           <span className="text-gray-600 text-sm mt-2">
-            {blog.auther.username}
+            {blog.author.username}
           </span>
         </div>
         <div className="flex items-center justify-between mt-4">

@@ -5,23 +5,37 @@ import axios from "axios";
 
 function CreateBlog() {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [bannerImg, setBannerImg] = useState("");
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const apiurl = import.meta.env.VITE_API_URL;
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!title.trim()) {
+      newErrors.title = "Title is required";
+    }
+    if (!content.trim()) {
+      newErrors.content = "Content is required";
+    }
+    if (!image) {
+      newErrors.image = "Banner image is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Create preview URL
     const previewUrl = URL.createObjectURL(file);
     setPreviewImage(previewUrl);
     setLoading(true);
-    setError("");
+    setErrors({ ...errors, image: "" });
 
     const formData = new FormData();
     formData.append("onlyimage", file);
@@ -32,12 +46,10 @@ function CreateBlog() {
         formData
       );
       if (response?.data.success) {
-        setBannerImg(response.data.data);
-        console.log(response);
+        setImage(response.data.data);
       }
-      setError("");
     } catch (error) {
-      setError("Failed to upload image. Please try again.");
+      setErrors({ ...errors, image: "Failed to upload image. Please try again." });
       console.error("Image upload failed", error);
     } finally {
       setLoading(false);
@@ -45,20 +57,67 @@ function CreateBlog() {
   };
 
   const handleSubmit = async (isPublished) => {
-    const blogData = {
-      title,
-      description,
-      bannerImg,
-      isPublished,
-    };
-    console.log(blogData);
-    navigate("/");
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("isPublished", isPublished);
+    
+    // If image is a File object, append it
+    if (image instanceof File) {
+      formData.append("image", image);
+    } else if (typeof image === "string") {
+      // If image is already uploaded and we have the URL
+      formData.append("image", image);
+    }
+
+    console.log(formData);
+    
+
+    try {
+      const response = await axios.post(
+        `${apiurl}/blog/blogcreate`,
+        formData, // ✅ Send the FormData object as it is
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true, // Keep this if needed
+        }
+      );
+      
+      // const response = await axios.post(
+      //   `${apiurl}/blog/blogcreate`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
+
+      console.log(response);
+      
+      if (response.data.statusCode === 201) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      
+      const errorMessage = error.response?.data?.message || "Failed to create blog post";
+      setErrors({ ...errors, submit: errorMessage });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
             Create New Blog Post
@@ -68,36 +127,41 @@ function CreateBlog() {
           </p>
         </div>
 
-        {/* Main Form */}
         <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
-          {/* Title Input */}
           <div className="mb-6">
             <label
               htmlFor="title"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Blog Title
+              Blog Title *
             </label>
             <input
               id="title"
               type="text"
               placeholder="Enter your blog title"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+              onChange={(e) => {
+                setTitle(e.target.value);
+                setErrors({ ...errors, title: "" });
+              }}
+              className={`w-full px-4 py-3 rounded-lg border ${
+                errors.title ? "border-red-500" : "border-gray-300"
+              } focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200`}
             />
+            {errors.title && (
+              <p className="mt-2 text-sm text-red-600">{errors.title}</p>
+            )}
           </div>
 
-          {/* Image Upload */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Banner Image
+              Banner Image *
             </label>
             <div className="relative">
-              {previewImage || bannerImg ? (
+              {previewImage || image ? (
                 <div className="relative">
                   <img
-                    src={bannerImg || previewImage}
+                    src={image || previewImage}
                     alt="Banner"
                     className="w-full h-64 object-cover rounded-lg"
                   />
@@ -118,7 +182,9 @@ function CreateBlog() {
               ) : (
                 <label
                   htmlFor="image-upload"
-                  className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition duration-200"
+                  className={`flex items-center justify-center w-full h-64 border-2 border-dashed ${
+                    errors.image ? "border-red-500" : "border-gray-300"
+                  } rounded-lg cursor-pointer hover:border-blue-500 transition duration-200`}
                 >
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 text-gray-400">
@@ -151,19 +217,25 @@ function CreateBlog() {
                 accept="image/*"
               />
             </div>
-            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+            {errors.image && (
+              <p className="mt-2 text-sm text-red-600">{errors.image}</p>
+            )}
           </div>
 
-          {/* Editor */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Content
+              Content *
             </label>
-            <div className="border border-gray-300 rounded-lg">
+            <div className={`border ${
+              errors.content ? "border-red-500" : "border-gray-300"
+            } rounded-lg`}>
               <Editor
                 apiKey="luejpslmzgs69x1v91w4c7pjxh2uhr5aj2a3dzopry8khfb6"
-                value={description} 
-                onEditorChange={(content) => setDescription(content)} // Update description state
+                value={content}
+                onEditorChange={(newContent) => {
+                  setContent(newContent);
+                  setErrors({ ...errors, content: "" });
+                }}
                 init={{
                   height: 500,
                   menubar: false,
@@ -174,30 +246,38 @@ function CreateBlog() {
                   ],
                   toolbar:
                     "undo redo | formatselect | bold italic underline strikethrough | \
-      forecolor backcolor | alignleft aligncenter alignright alignjustify | \
-      bullist numlist outdent indent | removeformat | help",
+                    forecolor backcolor | alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | help",
                   content_style:
                     "body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; font-size: 16px }",
                 }}
               />
             </div>
+            {errors.content && (
+              <p className="mt-2 text-sm text-red-600">{errors.content}</p>
+            )}
           </div>
 
-          {/* Action Buttons */}
+          {errors.submit && (
+            <div className="mb-6">
+              <p className="text-sm text-red-600">{errors.submit}</p>
+            </div>
+          )}
+
           <div className="flex flex-col sm:flex-row gap-4 justify-end mt-8">
             <button
               onClick={() => handleSubmit(false)}
               disabled={loading}
               className="inline-flex justify-center items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Save as Draft
+              {loading ? "Saving..." : "Save as Draft"}
             </button>
             <button
               onClick={() => handleSubmit(true)}
               disabled={loading}
               className="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Publish Post
+              {loading ? "Publishing..." : "Publish Post"}
             </button>
           </div>
         </div>
@@ -206,4 +286,4 @@ function CreateBlog() {
   );
 }
 
-export default CreateBlog;
+export default CreateBlog;  

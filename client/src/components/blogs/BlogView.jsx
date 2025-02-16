@@ -39,7 +39,7 @@ const BlogView = () => {
       </button>
 
       <img
-        src={blog.bannerImg}
+        src={blog.image}
         alt="Blog Banner"
         className="w-full h-64 object-cover rounded-lg"
       />
@@ -48,18 +48,19 @@ const BlogView = () => {
 
       <div className="flex items-center gap-3 mt-3">
         <img
-          src={blog.auther.image}
+          src={blog.author.avatar}
           className="h-10 w-10 rounded-full"
           alt="Author"
         />
-        <span className="text-gray-700">{blog.auther.username}</span>
+        <span className="text-gray-700">{blog.author.username}</span>
       </div>
 
-      <p className="text-gray-600 mt-4">{blog.description}</p>
+      <div className="text-gray-600 mt-4" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+
 
       <div className="flex items-center space-x-2 text-red-500 hover:text-red-600 mt-4">
         <Heart size={20} />
-        <span className="font-medium">{blog.likes} Likes</span>
+        <span className="font-medium">{blog.likes || 0} Likes</span>
       </div>
 
       {/* Comments Section */}

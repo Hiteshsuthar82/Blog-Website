@@ -1,5 +1,5 @@
 const blog = {
-    bannerImg:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    image:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
     title:"xyz comy is broken",
     description:"Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile, our drag-and-drop editor allows you to customize thousands of free banner templates to match your brand’s visual identity—you choose the layout, colors, font, and images. And with preset template sizes for every online platform, you’ll get the perfect dimensions every time.",
     likes:"100",
@@ -10,7 +10,7 @@ const blog = {
 }
 
 const allBlogs = [{
-    bannerImg:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    image:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
     title:"xyz comy is broken",
     description:"Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile, our drag-and-drop editor allows you to customize thousands of free banner templates to match your brand’s visual identity—you choose the layout, colors, font, and images. And with preset template sizes for every online platform, you’ll get the perfect dimensions every time.",
     likes:"100",
@@ -20,7 +20,7 @@ const allBlogs = [{
     ],
 },
 {
-    bannerImg:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+    image:"https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
     title:"xyz comy is broken",
     description:"Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile, our drag-and-drop editor allows you to customize thousands of free banner templates to match your brand’s visual identity—you choose the layout, colors, font, and images. And with preset template sizes for every online platform, you’ll get the perfect dimensions every time.",
     likes:"100",
