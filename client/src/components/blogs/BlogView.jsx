@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 
@@ -8,7 +8,10 @@ const BlogView = () => {
   const blog = location.state?.blog;
 
   const [comments, setComments] = useState(blog?.comments || []);
+  const { id } = useParams(); 
   const [newComment, setNewComment] = useState("");
+  console.log(id);
+  
 
   if (!blog) {
     return <div className="text-center mt-20">Blog not found.</div>;

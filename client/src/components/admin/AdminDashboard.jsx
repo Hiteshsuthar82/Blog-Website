@@ -31,8 +31,8 @@ const AdminDashboard = () => {
 
   const routes = [
     { name: "All Users", path: "allusers", icon: Users },
-    { name: "Premium Users", path: "premium-users", icon: Crown },
-    { name: "Non-Premium Users", path: "non-premium-users", icon: UserCircle },
+    // { name: "Premium Users", path: "premium-users", icon: Crown },
+    // { name: "Non-Premium Users", path: "non-premium-users", icon: UserCircle },
     { name: "Verified Users", path: "verified-users", icon: UserCheck },
     { name: "Non-Verified Users", path: "non-verified-users", icon: UserX },
   ];
