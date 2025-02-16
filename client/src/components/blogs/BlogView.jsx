@@ -1,35 +1,45 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 const BlogView = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const blog = location.state?.blog;
+  const apiurl = import.meta.env.VITE_API_URL;
+
 
   const [comments, setComments] = useState(blog?.comments || []);
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [newComment, setNewComment] = useState("");
   console.log(id);
-  
 
   if (!blog) {
     return <div className="text-center mt-20">Blog not found.</div>;
   }
 
   // Function to handle adding a new comment
-  const addComment = () => {
+  const addComment = async () => {
+    const response = await axios.post(`${apiurl}/comment/addcomment`, 
+      {blogId:id,content:newComment},
+      {withCredentials: true},
+    );
+    if (response?.data.success) {
+      console.log(response);
+      // setAllBlogs(response.data.data);
+    }
     if (newComment.trim() === "") return;
 
-    const newCommentObj = {
-      username: "Guest User", // Temporary username
-      content: newComment,
-      profileImg:
-        "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y", // Default avatar
-    };
+    // const newCommentObj = {
+    //   username: "Guest User", // Temporary username
+    //   content: newComment,
+    //   profileImg:
+    //     "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y", // Default avatar
+    // };
 
-    setComments([...comments, newCommentObj]);
-    setNewComment("");
+    // setComments([...comments, newCommentObj]);
+    // setNewComment("");
   };
 
   return (
@@ -58,8 +68,10 @@ const BlogView = () => {
         <span className="text-gray-700">{blog.author.username}</span>
       </div>
 
-      <div className="text-gray-600 mt-4" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
-
+      <div
+        className="text-gray-600 mt-4"
+        dangerouslySetInnerHTML={{ __html: blog.content }}
+      ></div>
 
       <div className="flex items-center space-x-2 text-red-500 hover:text-red-600 mt-4">
         <Heart size={20} />
@@ -71,13 +83,14 @@ const BlogView = () => {
       <div className="mt-4 space-y-4">
         {comments.map((comment, index) => (
           <div key={index} className="flex gap-3 bg-gray-100 p-3 rounded-lg">
+            {console.log(comment)}
             <img
-              src={comment.profileImg}
+              src={comment?.owner?.avatar}
               className="h-8 w-8 rounded-full"
               alt="User"
             />
             <div>
-              <p className="font-medium">{comment.username}</p>
+              <p className="font-medium">{comment?.owner?.username}</p>
               <p className="text-gray-600">{comment.content}</p>
             </div>
           </div>
