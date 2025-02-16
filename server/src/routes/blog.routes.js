@@ -37,7 +37,7 @@ router.route("/blogcreate").post(
   
 
 //   delete blog
-  router.route("/blog/:id").delete(verifyJWT, deleteBlog);
+  router.route("/delete/:id").delete(verifyJWT, deleteBlog);
 
 
   // toggle publish status
