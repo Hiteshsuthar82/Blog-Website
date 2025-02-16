@@ -10,9 +10,35 @@ import mongoose from "mongoose";
 
 
 // 1. LIKED THE BLOG
+// export const likeBlog = asyncHandler(async (req, res) => {
+//     const userId = req.user.id;
+//     console.log(userId)
+//     const { blogId } = req.body;
+
+//     // Check if blog exists
+//     const blog = await Blog.findById(blogId);
+//     if (!blog) {
+//         throw new ApiError(404, "Blog not found!");
+//     }
+
+//     // Check if user already liked the blog
+//     const existingLike = await Like.findOne({ blog: blogId, likedBy: userId });
+
+//     if (existingLike) {
+//         // Unlike the blog
+//         await Like.findByIdAndDelete(existingLike._id);
+//         return res.status(200).json(new ApiResponse(200, null, "Blog unliked successfully!"));
+//     }
+
+//     // Like the blog
+//     await Like.create({ blog: blogId, likedBy: userId });
+
+//     return res.status(201).json(new ApiResponse(201, null, "Blog liked successfully!"));
+// });
+
+
 export const likeBlog = asyncHandler(async (req, res) => {
     const userId = req.user.id;
-    console.log(userId)
     const { blogId } = req.body;
 
     // Check if blog exists
@@ -27,14 +53,24 @@ export const likeBlog = asyncHandler(async (req, res) => {
     if (existingLike) {
         // Unlike the blog
         await Like.findByIdAndDelete(existingLike._id);
+        blog.likes = blog.likes.filter((like) => like.toString() !== existingLike._id.toString());
+        await blog.save();
+
         return res.status(200).json(new ApiResponse(200, null, "Blog unliked successfully!"));
     }
 
     // Like the blog
-    await Like.create({ blog: blogId, likedBy: userId });
+    const like = await Like.create({ blog: blogId, likedBy: userId });
+
+    // Add like to blog's likes array
+    blog.likes.push(like._id);
+    await blog.save();
 
     return res.status(201).json(new ApiResponse(201, null, "Blog liked successfully!"));
 });
+
+
+
 
 // get total likes of the all blogs
 
