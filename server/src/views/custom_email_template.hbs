@@ -1,5 +1,7 @@
+{{!--
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,6 +13,7 @@
       margin: 0;
       padding: 0;
     }
+
     .container {
       max-width: 600px;
       margin: 20px auto;
@@ -20,6 +23,7 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
+
     .header {
       background: #007bff;
       color: white;
@@ -27,18 +31,22 @@
       font-size: 20px;
       border-radius: 10px 10px 0 0;
     }
+
     .content {
       padding: 20px;
     }
+
     .gif-container img {
       width: 100px;
       height: auto;
     }
+
     .message {
       font-size: 18px;
       color: #333;
       margin: 20px 0;
     }
+
     .footer {
       font-size: 12px;
       color: #777;
@@ -46,6 +54,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="header">
@@ -62,4 +71,96 @@
     </div>
   </div>
 </body>
+
+</html> --}}
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Post Success</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .header {
+      background: #28a745;
+      color: white;
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .content {
+      padding: 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .message {
+      font-size: 18px;
+      font-weight: bold;
+      color: #28a745;
+      background: #e9f7ef;
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .illustration {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+  </style>
+  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      Blog Post Successfully Published!
+    </div>
+    <div class="content">
+      <div class="illustration">
+        <dotlottie-player src="https://lottie.host/2f761b93-e819-4a84-83e9-563b5e55a37b/GGAkeabkxm.lottie"
+          background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
+      </div>
+      <p>Dear <strong>{{fullName}}</strong>,</p>
+      <p>Congratulations! Your blog post has been successfully published on BlogSphere.</p>
+      <p class="message">Your blog is now live for readers!</p>
+      <p>Thank you for contributing to our community.</p>
+    </div>
+    <div class="footer">
+      &copy; 2025 BlogSphere. All rights reserved.
+    </div>
+  </div>
+</body>
+
 </html>
