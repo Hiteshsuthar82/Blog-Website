@@ -9,7 +9,8 @@ import {
     getPublishedBlogs,
     getPublishedBlogsForUser,
     getNotPublishedBlogsForUser,
-    sendBlogUpdateToVerifiedUsers
+    sendBlogUpdateToVerifiedUsers,
+    fetchBlogById
 } from '../controllers/blog.controller.js'
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -19,6 +20,8 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 
+// fetch blog by blogid
+  router.route("/user/:blogId").get(fetchBlogById);
 
 
 // Create a new blog post

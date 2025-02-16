@@ -110,7 +110,20 @@ export const sendBlogUpdateToVerifiedUsers = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, [], "Emails sent to all verified users!"));
 });
 
+// 55. fetch a blog post using only blog id
 
+export const fetchBlogById = asyncHandler(async (req, res) => {
+    const { blogId } = req.params;
+
+    // Get blog details
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+        throw new ApiError(404, "Blog not found!");
+    }
+
+    // Send response
+    return res.status(200).json(new ApiResponse(200, blog, "Blog fetched successfully!"));
+});
 
 //   11.send mail all verfied users of new blog post
 
