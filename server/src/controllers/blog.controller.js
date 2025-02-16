@@ -3,6 +3,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 import { Blog } from "../models/blog.model.js";
+import {Like} from "../models/like.model.js";
+
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import {
@@ -357,12 +359,16 @@ export const togglePublishStatus = asyncHandler(async (req, res) => {
 //   get all the only published true posts from the blog
 export const getPublishedBlogs = asyncHandler(async (req, res) => {
   try {
-      // Find all published blogs and populate author + comments (with owner details)
+      // Find all published blogs and populate author, comments (with owner), and likes (with likedBy user details)
       const blogs = await Blog.find({ isPublished: true })
           .populate("author", "username avatar email")
           .populate({
               path: "comments",
               populate: { path: "owner", select: "username avatar email" }, // Populate owner of each comment
+          })
+          .populate({
+              path: "likes",
+              populate: { path: "likedBy", select: "username avatar email" }, // Populate user who liked the blog
           });
 
       if (!blogs || blogs.length === 0) {
@@ -375,4 +381,5 @@ export const getPublishedBlogs = asyncHandler(async (req, res) => {
       throw new ApiError(500, "Something went wrong!");
   }
 });
+
 
