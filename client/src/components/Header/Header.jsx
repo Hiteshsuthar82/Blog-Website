@@ -42,11 +42,11 @@ function Header() {
     //   slug: "/signup",
     //   active: !authstatus,
     // },
-    {
-      name: "Create Website",
-      slug: "/steps",
-      active: authstatus,
-    },
+    // {
+    //   name: "Create Website",
+    //   slug: "/steps",
+    //   active: authstatus,
+    // },
   ];
 
   return (

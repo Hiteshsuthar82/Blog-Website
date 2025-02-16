@@ -1,58 +1,116 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heart, MessageCircle, Edit, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const allMyBlogs = [
-  {
-    _id:"3",
-    bannerImg:
-      "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-    title: "XYZ Company is Broken",
-    description:
-      "Making an online banner with Canva is easy. Whether you're wanting to dress up your social media profile...",
-    likes: "100",
-    isPublished: true,
-    comments: [
-      {
-        username: "john",
-        content: "Great post!",
-        profileImg: "https://example.com/john.jpg",
-      },
-      {
-        username: "ram",
-        content: "Nice insights!",
-        profileImg: "https://example.com/ram.jpg",
-      },
-    ],
-  },
-  {
-    bannerImg:
-      "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
-    title: "Unpublished Blog Example",
-    isPublished: false,
-    description:
-      "This is an example of an unpublished blog. Click publish to make it live!",
-    likes: "50",
-    comments: [],
-  },
-];
+
+// const allMyBlogs = [
+//     {
+//       _id:"1",
+//       isPublished:true,
+//       image:
+//         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROvJuFdhlFQ4Zxu6pov9RMus7mKLwjH5Tugw&s",
+//       title: "xyz company is broken",
+//       content:
+//         "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+//       author: {
+//         username: "john Doe",
+//         image:
+//           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//       },
+//       likes: "100",
+//       comments: [
+//         {
+//           username: "john",
+//           content: "hello bhai mere kya hal",
+//           profileImg:
+//             "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//         },
+//         {
+//           username: "ramsh sharma",
+//           content: "hello bhai mere kya hal",
+//           profileImg:
+//             "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//         },
+//       ],
+//     },
+//     {
+//       _id:"2",
+//       isPublished:false,
+//       image:
+//         "https://intihug.com/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg",
+//       title: "xyz company is broken",
+//       content:
+//         "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+//       author: {
+//         username: "john Doe",
+//         image:
+//           "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//       },
+//       likes: "100",
+//       comments: [
+//         {
+//           username: "john",
+//           content: "hello bhai mere kya hal",
+//           profileImg:
+//             "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//         },
+//         {
+//           username: "ramsh sharma",
+//           content: "hello bhai mere kya hal",
+//           profileImg:
+//             "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+//         },
+//       ],
+//     },
+//   ];
 
 const MyBlogs = () => {
   const [showPublished, setShowPublished] = useState(true);
-  const [blogs, setBlogs] = useState(allMyBlogs);
+  const [blogs, setBlogs] = useState([]);
   const [confirmPublish, setConfirmPublish] = useState(null);
+  const [allMyBlogs, setAllMyBlogs] = useState([]);
   const navigate = useNavigate();
+  const apiurl = import.meta.env.VITE_API_URL;
+
+
+  useEffect(()=>{
+    getAllBlogs();
+  },[])
+
+  const getAllBlogs = async () => {
+    const response = await axios.get(
+      `${apiurl}/blog/userallblogs`,
+      { withCredentials: true }
+    );
+    if (response?.data.success) {
+      console.log(response);
+      setBlogs(Array.isArray(response.data.data) ? response.data.data : []);
+    }
+  }
 
   const handlePublish = (blog) => {
     setConfirmPublish(blog);
   };
 
-  const confirmPublishBlog = () => {
-    setBlogs((prevBlogs) =>
-      prevBlogs.map((b) =>
-        b.title === confirmPublish.title ? { ...b, isPublished: true } : b
-      )
+  const confirmPublishBlog = async (blog) => {
+    console.log(blog);
+    
+    const response = await axios.patch(
+      `${apiurl}/blog/publish-post/${blog._id}`,
+      {},
+      { withCredentials: true }
     );
+    if (response?.data.success) {
+      console.log(response);
+      setBlogs(Array.isArray(response.data.data) ? response.data.data : []);
+      getAllBlogs();
+    }
+    // setBlogs((prevBlogs) =>
+    //   prevBlogs.map((b) =>
+    //     b.title === confirmPublish.title ? { ...b, isPublished: true } : b
+    //   )
+    // );
     setConfirmPublish(null);
   };
 
@@ -152,7 +210,7 @@ const MyBlogs = () => {
                 Cancel
               </button>
               <button
-                onClick={confirmPublishBlog}
+                onClick={() => confirmPublishBlog(confirmPublish)}
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Publish
@@ -178,7 +236,7 @@ const BlogCard = ({ blog, onPublish }) => {
     >
       <div className="relative">
         <img
-          src={blog.bannerImg}
+          src={blog.image}
           alt={blog.title}
           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -203,9 +261,9 @@ const BlogCard = ({ blog, onPublish }) => {
         <h2 className="text-lg font-semibold text-gray-900 line-clamp-1">
           {blog.title}
         </h2>
-        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-          {blog.description}
-        </p>
+        {/* <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+          {blog.content}
+        </p> */}
 
         <div className="mt-4 flex items-center justify-between">
           <div className="flex space-x-4">

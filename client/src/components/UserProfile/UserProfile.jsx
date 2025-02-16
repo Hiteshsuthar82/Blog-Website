@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { LogOut, Check, Pencil, X } from 'lucide-react';
-import { useDispatch, useSelector } from 'react-redux';
-import { redirect, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { getCurrentUser } from '../../features/authslice';
-import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
+import React, { useEffect, useState } from "react";
+import { LogOut, Check, Pencil, X } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { redirect, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { getCurrentUser } from "../../features/authslice";
+import DeleteConfirmationDialog from "../DeleteConfirmationDialog";
 
 const ProfilePage = () => {
   // const user = {
@@ -30,19 +30,19 @@ const ProfilePage = () => {
   const [showErrorToast, setShowErrorToast] = useState(false);
   const [showDeletedToast, setShowDeletedToast] = useState(false);
   const [updating, setUpdating] = useState(false);
-  const apiurl = import.meta.env.VITE_API_URL
+  const apiurl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCurrentUser())
-  }, [])
+    dispatch(getCurrentUser());
+  }, []);
   useEffect(() => {
-    setEmail(user.email)
-  }, [user])
+    setEmail(user.email);
+  }, [user]);
 
   const onupdateEmail = async () => {
-    setUpdating(true)
+    setUpdating(true);
     console.log("email updating");
 
     try {
@@ -62,9 +62,8 @@ const ProfilePage = () => {
         if (emailResponse?.data.success) {
           setShowEmailModal(false);
           setUpdating(false);
-          navigate("/verify-otp")
+          navigate("/verify-otp");
         }
-
       }
     } catch (error) {
       console.log(error);
@@ -72,11 +71,10 @@ const ProfilePage = () => {
       setShowEmailModal(false);
       setUpdating(false);
     }
-  }
-
+  };
 
   const onUpdatePassword = async () => {
-    setUpdating(true)
+    setUpdating(true);
     console.log("password updating");
 
     try {
@@ -95,43 +93,40 @@ const ProfilePage = () => {
         setTimeout(() => setShowErrorToast(false), 3000);
         setUpdating(false);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       setShowErrorToast(true);
       setTimeout(() => setShowErrorToast(false), 3000);
       setShowEmailModal(false);
       setUpdating(false);
     }
-  }
+  };
 
   const onDeleteAccount = async () => {
-    setUpdating(true)
+    setUpdating(true);
     console.log("deleting account");
 
     try {
-      const response = await axios.delete(
-        `${apiurl}/user/delete-account`,
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${apiurl}/user/delete-account`, {
+        withCredentials: true,
+      });
       if (response?.data.success) {
-        setShowDeleteConfirm(false)
-        setShowDeletedToast(true)
+        setShowDeleteConfirm(false);
+        setShowDeletedToast(true);
         setTimeout(() => {
-          setShowDeletedToast(false)
-          navigate("/login")
-          dispatch(getCurrentUser())
+          setShowDeletedToast(false);
+          navigate("/login");
+          dispatch(getCurrentUser());
         }, 2000);
         setUpdating(false);
       } else {
         setUpdating(false);
       }
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
       setUpdating(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
@@ -139,7 +134,6 @@ const ProfilePage = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">Profile Settings</h1>
-
         </div>
 
         {/* Main Content */}
@@ -159,11 +153,21 @@ const ProfilePage = () => {
                   </div>
                 )}
               </div>
-              <h2 className="mt-4 text-xl font-semibold text-gray-800">{user.username}</h2>
-              <span className="text-gray-500 text-sm">Member From {new Date(user.createdAt).getFullYear()}</span>
+              <h2 className="mt-4 text-xl font-semibold text-gray-800">
+                {user.username}
+              </h2>
+              <span className="text-gray-500 text-sm">
+                Member From {new Date(user.createdAt).getFullYear()}
+              </span>
               <div className="mt-4">
-                <span className={`px-3 py-1 rounded-full text-sm ${user.isPremium ? 'bg-gradient-to-r from-purple-600 to-pink-500 shadow-md hover:from-purple-700 hover:to-pink-600 text-white' : 'bg-gray-100 text-gray-600'}`}>
-                  {user.isPremium ? 'Premium' : 'Free Plan'}
+                <span
+                  className={`px-3 py-1 rounded-full text-sm ${
+                    user.isPremium
+                      ? "bg-gradient-to-r from-purple-600 to-pink-500 shadow-md hover:from-purple-700 hover:to-pink-600 text-white"
+                      : "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {user.isPremium ? "Premium" : "Free Plan"}
                 </span>
               </div>
             </div>
@@ -174,9 +178,14 @@ const ProfilePage = () => {
             <div className="space-y-6">
               {/* Email Section */}
               <div>
-                <label className="text-sm font-medium text-gray-600">Email Address</label>{!user.isVerified ? (
-                  <span className='text-yellow-500 ml-2'>Pending</span>
-                ) : ""}
+                <label className="text-sm font-medium text-gray-600">
+                  Email Address
+                </label>
+                {!user.isVerified ? (
+                  <span className="text-yellow-500 ml-2">Pending</span>
+                ) : (
+                  ""
+                )}
                 <div className="mt-2 flex items-center gap-3">
                   {isEditing ? (
                     <input
@@ -189,14 +198,15 @@ const ProfilePage = () => {
                     <span className="text-gray-800">{user.email}</span>
                   )}
                   {user.isVerified ? (
-                    <div className='text-green-500'>Verified</div>
-                  ) : (<button
-                    onClick={() => setShowEmailModal(true)}
-                    className="px-4 py-2 rounded-lg text-black hover:text-gray-600 transition-colors"
-                  >
-                    <Pencil size={18} />
-                  </button>)}
-
+                    <div className="text-green-500">Verified</div>
+                  ) : (
+                    <button
+                      onClick={() => setShowEmailModal(true)}
+                      className="px-4 py-2 rounded-lg text-black hover:text-gray-600 transition-colors"
+                    >
+                      <Pencil size={18} />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -210,7 +220,10 @@ const ProfilePage = () => {
                   <span className="text-gray-400">●●●●●●●●</span>
                 </button>
 
-                <button className="w-full p-3 rounded-lg border border-red-200 hover:bg-red-50 transition-colors flex items-center justify-between text-red-600" onClick={() => setShowDeleteConfirm(true)}>
+                <button
+                  className="w-full p-3 rounded-lg border border-red-200 hover:bg-red-50 transition-colors flex items-center justify-between text-red-600"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
                   <span>{updating ? "Deleting..." : "Delete Account"}</span>
                   <LogOut className="w-5 h-5" />
                 </button>
@@ -316,8 +329,14 @@ const ProfilePage = () => {
         )}
 
         {showDeleteConfirm ? (
-          <DeleteConfirmationDialog deleting={updating} onCancelClick={() =>  setShowDeleteConfirm(false)} onDeleteClick={onDeleteAccount} />
-        ) : ""}
+          <DeleteConfirmationDialog
+            deleting={updating}
+            onCancelClick={() => setShowDeleteConfirm(false)}
+            onDeleteClick={onDeleteAccount}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
