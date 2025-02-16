@@ -12,6 +12,7 @@ import {
   OtpVerification,
   PaymentGateway,
   AdminDashboard,
+  CommentPage,
 } from "./components/index.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -66,6 +67,12 @@ const router = createBrowserRouter([
           <AuthLayout authentication>
             <PaymentGateway />
           </AuthLayout>
+        ),
+      },
+      {
+        path: "/comment-page",
+        element: (
+            <CommentPage />
         ),
       },
     ],
