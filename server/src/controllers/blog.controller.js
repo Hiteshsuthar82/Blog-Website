@@ -26,29 +26,21 @@ export const createBlog = asyncHandler(async (req, res) => {
       }
   
     // Get data from request
-    const { title, content , isPublished } = req.body;
+    const { title, content , isPublished, image } = req.body;
   
     // Validation
     if (!title || !content) {
       throw new ApiError(400, "Title and content are required!");
     }
   
-    // Handling Image Upload
-    let imageURL = "";
-    if (req.file) {
-      const imageRes = await uploadOnCloudinary(req.file.path);
-      if (!imageRes) {
-        throw new ApiError(500, "Image upload failed!");
-      }
-      imageURL = imageRes.url;
-    }
+ 
   
     // Create new blog post
     const blog = await Blog.create({
       title,
       content,
       author: userId,
-      image: imageURL || undefined, 
+      image, 
       isPublished
     });
   
