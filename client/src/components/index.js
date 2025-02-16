@@ -19,6 +19,10 @@ import OtpVerification from "./otpVerification/OtpVerification";
 import PaymentGateway from "./PaymentGateway";
 import AdminDashboard from "./admin/AdminDashboard";
 import NotFound from "./NotFound";
+import CommentPage from "./CommentPage";
+import BlogView from "./blogs/BlogView";
+import CreateBlog from "./blogs/CreateBlog";
+import MyBlogs from "./blogs/MyBlogs";
 
 export {
   Header,
@@ -41,5 +45,9 @@ export {
   OtpVerification,
   PaymentGateway,
   AdminDashboard,
-  NotFound
+  NotFound,
+  CommentPage,
+  BlogView,
+  CreateBlog,
+  MyBlogs,
 };

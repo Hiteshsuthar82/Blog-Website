@@ -12,6 +12,10 @@ import {
   OtpVerification,
   PaymentGateway,
   AdminDashboard,
+  CommentPage,
+  BlogView,
+  CreateBlog,
+  MyBlogs,
 } from "./components/index.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -35,6 +39,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication={false}>
             <Login />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/my-blogs",
+        element: (
+          <AuthLayout authentication>
+            <MyBlogs />
           </AuthLayout>
         ),
       },
@@ -66,6 +78,26 @@ const router = createBrowserRouter([
           <AuthLayout authentication>
             <PaymentGateway />
           </AuthLayout>
+        ),
+      },
+      {
+        path: "/blog/:id",
+        element: (
+            <BlogView />
+        ),
+      },
+      {
+        path: "/create-blog",
+        element: (
+          <AuthLayout authentication>
+            <CreateBlog />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: "/comment-page",
+        element: (
+            <CommentPage />
         ),
       },
     ],
