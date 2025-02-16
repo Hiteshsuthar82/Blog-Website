@@ -3,7 +3,6 @@ import { Heart, MessageCircle, Edit, Trash2, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 // const allMyBlogs = [
 //     {
 //       _id:"1",
@@ -73,21 +72,19 @@ const MyBlogs = () => {
   const navigate = useNavigate();
   const apiurl = import.meta.env.VITE_API_URL;
 
-
-  useEffect(()=>{
+  useEffect(() => {
     getAllBlogs();
-  },[])
+  }, []);
 
   const getAllBlogs = async () => {
-    const response = await axios.get(
-      `${apiurl}/blog/userallblogs`,
-      { withCredentials: true }
-    );
+    const response = await axios.get(`${apiurl}/blog/userallblogs`, {
+      withCredentials: true,
+    });
     if (response?.data.success) {
       console.log(response);
       setBlogs(Array.isArray(response.data.data) ? response.data.data : []);
     }
-  }
+  };
 
   const handlePublish = (blog) => {
     setConfirmPublish(blog);
@@ -95,7 +92,7 @@ const MyBlogs = () => {
 
   const confirmPublishBlog = async (blog) => {
     console.log(blog);
-    
+
     const response = await axios.patch(
       `${apiurl}/blog/publish-post/${blog._id}`,
       {},
@@ -224,9 +221,41 @@ const MyBlogs = () => {
 };
 
 const BlogCard = ({ blog, onPublish }) => {
-  const [likes, setLikes] = useState(parseInt(blog.likes));
+  const [likes, setLikes] = useState(parseInt(blog.likes.length));
   const [isHovered, setIsHovered] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(null);
   const navigate = useNavigate();
+  const apiurl = import.meta.env.VITE_API_URL;
+
+
+  const handleDelete = (blog) => {
+    setConfirmDelete(blog);
+  };
+
+  const confirmDeleteBlog = async () => {
+    if (!confirmDelete) return;
+
+    try {
+      const response = await axios.delete(
+        `${apiurl}/blog/delete/${confirmDelete._id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response?.data.success) {
+        alert("Blog deleted successfully!");
+        setBlogs((prevBlogs) =>
+          prevBlogs.filter((blog) => blog._id !== confirmDelete._id)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting blog:", error);
+      alert(error.response?.data?.message || "Failed to delete blog");
+    }
+
+    setConfirmDelete(null); // Close modal
+  };
 
   return (
     <div
@@ -246,11 +275,17 @@ const BlogCard = ({ blog, onPublish }) => {
               <button className="p-2 text-white bg-blue-600/90 rounded-lg hover:bg-blue-700 transition-colors">
                 <Edit size={16} />
               </button>
-              <button className="p-2 text-white bg-red-600/90 rounded-lg hover:bg-red-700 transition-colors">
+              <button
+                onClick={() => handleDelete(blog)}
+                className="p-2 text-white bg-red-600/90 rounded-lg hover:bg-red-700 transition-colors"
+              >
                 <Trash2 size={16} />
               </button>
             </div>
-            <button onClick={() => navigate(`/blog/${blog._id}`, { state: { blog } })} className="p-2 text-white bg-gray-800/90 rounded-lg hover:bg-gray-900 transition-colors">
+            <button
+              onClick={() => navigate(`/blog/${blog._id}`, { state: { blog } })}
+              className="p-2 text-white bg-gray-800/90 rounded-lg hover:bg-gray-900 transition-colors"
+            >
               <Eye size={16} />
             </button>
           </div>
@@ -299,6 +334,33 @@ const BlogCard = ({ blog, onPublish }) => {
           )}
         </div>
       </div>
+      {confirmDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4 transform transition-all">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Confirm Delete
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete "{confirmDelete.title}"? This
+              action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteBlog}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
