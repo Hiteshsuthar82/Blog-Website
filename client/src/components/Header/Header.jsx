@@ -18,8 +18,13 @@ function Header() {
 
   const navitems = [
     {
-      name: "Home",
+      name: "All Blogs",
       slug: "/",
+      active: true,
+    },
+    { 
+      name: "My Blogs",
+      slug: "/my-blogs",
       active: true,
     },
     {
@@ -155,7 +160,7 @@ function Header() {
 
                 <Profile />
 
-                {userData?.isPremium ? (
+                {/* {userData?.isPremium ? (
                   ""
                 ) : (
                   <button
@@ -166,7 +171,7 @@ function Header() {
                     Premium
                     <span className="absolute inset-0 bg-white opacity-10 blur-lg rounded-lg"></span>
                   </button>
-                )}
+                )} */}
               </div>
             ) : (
               <div className="flex flex-row-reverse gap-2">

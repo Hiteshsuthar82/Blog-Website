@@ -1,140 +1,134 @@
-import React from "react";
-import { 
-  Rocket, 
-  Users, 
-  Code, 
-  Database, 
-  Shield, 
-  Terminal, 
-  Globe, 
-  Layers 
-} from 'lucide-react';
+import { useState } from "react";
+import { Heart, MessageCircle, PlusCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const sections = [
-    {
-      icon: <Rocket className="w-16 h-16 text-blue-500" />,
-      title: "Accelerate Your Development",
-      description: "Our comprehensive starter kit provides everything you need to launch your project quickly and efficiently. From pre-configured tools to best-practice templates, we've got you covered.",
-      background: "bg-blue-50"
-    },
-    {
-      icon: <Code className="w-16 h-16 text-green-500" />,
-      title: "Modern Technology Stack",
-      description: "Leverage cutting-edge technologies including React 18, TypeScript, Tailwind CSS, and state-of-the-art build tools. Our stack is designed for maximum performance and developer experience.",
-      background: "bg-green-50"
-    },
-    {
-      icon: <Database className="w-16 h-16 text-purple-500" />,
-      title: "Scalable Architecture",
-      description: "Built with enterprise-grade architecture principles. Modular design, clean separation of concerns, and robust state management make scaling your application seamless.",
-      background: "bg-purple-50"
-    }
-  ];
+  const navigate = useNavigate();
 
-  const features = [
+  const allBlogs = [
     {
-      icon: <Shield className="w-12 h-12 text-red-500" />,
-      title: "Enhanced Security",
-      description: "Integrated security best practices, including input validation, secure routing, and protection against common web vulnerabilities."
+      _id:"1",
+      bannerImg:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROvJuFdhlFQ4Zxu6pov9RMus7mKLwjH5Tugw&s",
+      title: "xyz company is broken",
+      description:
+        "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+      auther: {
+        username: "john Doe",
+        image:
+          "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+      },
+      likes: "100",
+      comments: [
+        {
+          username: "john",
+          content: "hello bhai mere kya hal",
+          profileImg:
+            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+        },
+        {
+          username: "ramsh sharma",
+          content: "hello bhai mere kya hal",
+          profileImg:
+            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+        },
+      ],
     },
     {
-      icon: <Terminal className="w-12 h-12 text-indigo-500" />,
-      title: "Developer Tools",
-      description: "Pre-configured ESLint, Prettier, and comprehensive debugging tools to maintain code quality and productivity."
+      _id:"2",
+      bannerImg:
+        "https://intihug.com/wp-content/uploads/2014/12/img_banner-thin_mountains.jpg",
+      title: "xyz company is broken",
+      description:
+        "Making an online banner with Canva is easy. Whether you’re wanting to dress up your Facebook, X (formerly Twitter), YouTube or LinkedIn profile...",
+      auther: {
+        username: "john Doe",
+        image:
+          "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+      },
+      likes: "100",
+      comments: [
+        {
+          username: "john",
+          content: "hello bhai mere kya hal",
+          profileImg:
+            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+        },
+        {
+          username: "ramsh sharma",
+          content: "hello bhai mere kya hal",
+          profileImg:
+            "https://t4.ftcdn.net/jpg/02/29/75/83/240_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg",
+        },
+      ],
     },
-    {
-      icon: <Globe className="w-12 h-12 text-green-600" />,
-      title: "Global Performance",
-      description: "Optimized for international markets with internationalization support, performance monitoring, and lazy loading capabilities."
-    },
-    {
-      icon: <Layers className="w-12 h-12 text-orange-500" />,
-      title: "Microservices Ready",
-      description: "Designed with microservices architecture in mind, featuring easy integration with backend services and API management."
-    }
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl font-extrabold mb-6">
-            Unleash Your React Potential
-          </h1>
-          <p className="text-xl mb-10 max-w-2xl mx-auto">
-            A comprehensive, production-ready React starter kit that transforms your development workflow and accelerates project delivery.
-          </p>
-          <div className="space-x-4">
-            <button className="bg-white text-blue-700 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50 transition">
-              Start Building
-            </button>
-            <button className="border border-white text-white px-8 py-3 rounded-lg hover:bg-white/10 transition">
-              Learn More
-            </button>
-          </div>
-        </div>
-      </section>
+    <div className="max-w-6xl mx-auto p-4 relative">
+      {/* Create Blog Button */}
+      <button
+        onClick={() => navigate("/create-blog")}
+        title="create blog"
+        className="fixed bottom-6 right-6 bg-slate-800 text-white px-2 py-2  rounded-full flex items-center space-x-2 shadow-lg hover:bg-slate-600 transition"
+      >
+        <PlusCircle size={40} />
+      </button>
 
-      {/* Core Sections */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            {sections.map((section, index) => (
-              <div 
-                key={index} 
-                className={`p-8 rounded-xl shadow-lg ${section.background} transform hover:scale-105 transition duration-300`}
-              >
-                <div className="flex justify-center mb-6">
-                  {section.icon}
-                </div>
-                <h2 className="text-2xl font-bold text-center mb-4">{section.title}</h2>
-                <p className="text-center text-gray-700">{section.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="bg-gray-50 py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16">
-            Comprehensive Feature Set
-          </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 text-center"
-              >
-                <div className="flex justify-center mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="bg-gradient-to-br from-purple-600 to-blue-600 text-white py-24 px-6 text-center">
-        <h2 className="text-4xl font-bold mb-6">
-          Ready to Transform Your Development?
-        </h2>
-        <p className="text-xl mb-10 max-w-2xl mx-auto">
-          Join thousands of developers who have accelerated their project delivery with our React Starter Kit.
-        </p>
-        <button className="bg-white text-purple-700 px-10 py-4 rounded-lg text-lg font-bold hover:bg-blue-50 transition">
-          Get Started Now
-        </button>
-      </section>
+      <h1 className="text-3xl font-bold text-center mb-6">📜 All Blogs</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {allBlogs.map((blog) => (
+          <BlogCard key={blog._id} blog={blog} navigate={navigate} />
+        ))}
+      </div>
     </div>
-  
   );
 }
+
+const BlogCard = ({ blog, navigate }) => {
+  const [likes, setLikes] = useState(parseInt(blog.likes));
+
+  return (
+    <div
+      className="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-all cursor-pointer"
+      onClick={() => navigate(`/blog/${blog._id}`, { state: { blog } })}
+    >
+      <img
+        src={blog.bannerImg}
+        alt="Blog Banner"
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h2 className="text-xl font-semibold">{blog.title}</h2>
+        <div className="flex gap-2 mt-2">
+          <img
+            src={blog.auther.image}
+            className="h-10 w-10 rounded-full"
+            alt="profile img"
+          />
+          <span className="text-gray-600 text-sm mt-2">
+            {blog.auther.username}
+          </span>
+        </div>
+        <div className="flex items-center justify-between mt-4">
+          <button
+            className="flex items-center space-x-2 text-red-500 hover:text-red-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              setLikes(likes + 1);
+            }}
+          >
+            <Heart size={20} />
+            <span className="font-medium">{likes}</span>
+          </button>
+          <button className="flex items-center space-x-2 text-blue-500 hover:text-blue-600">
+            <MessageCircle size={20} />
+            <span className="font-medium">{blog.comments.length}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Home;

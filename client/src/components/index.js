@@ -20,6 +20,9 @@ import PaymentGateway from "./PaymentGateway";
 import AdminDashboard from "./admin/AdminDashboard";
 import NotFound from "./NotFound";
 import CommentPage from "./CommentPage";
+import BlogView from "./blogs/BlogView";
+import CreateBlog from "./blogs/CreateBlog";
+import MyBlogs from "./blogs/MyBlogs";
 
 export {
   Header,
@@ -43,5 +46,8 @@ export {
   PaymentGateway,
   AdminDashboard,
   NotFound,
-  CommentPage
+  CommentPage,
+  BlogView,
+  CreateBlog,
+  MyBlogs,
 };
